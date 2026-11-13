@@ -1,4 +1,4 @@
-package walk.walk1.walk.walk1;
+package walk.walk1.walk.walk1.plugin;
 
 import kd.bos.bill.AbstractBillPlugIn;
 import kd.bos.dataentity.entity.DynamicObject;
@@ -8,6 +8,7 @@ import kd.sdk.plugin.Plugin;
 
 import java.util.Date;
 import java.util.EventObject;
+import java.util.UUID;
 
 /**
  * 单据界面插件
@@ -17,6 +18,21 @@ public class WriteReturnBookDate extends AbstractBillPlugIn implements Plugin {
     public void afterCreateNewData(EventObject eventObject) {
         super.afterCreateNewData(eventObject);
         this.getModel().setValue("fxyz_returndate", new Date());
+    }
+
+    @Override
+    public void afterBindData(EventObject eventObject) {
+        super.afterBindData(eventObject);
+        // 在平台编码规则处理后补齐空编号，已有编号不覆盖。
+        if (this.getModel().getDataEntityType().getProperties().containsKey("billno")) {
+            Object billNo = this.getModel().getValue("billno");
+            if (billNo == null || billNo.toString().trim().isEmpty()) {
+                // 单据编号字段的最大长度为 30。
+                this.getModel().setValue("billno",
+                        UUID.randomUUID().toString().replace("-", "").substring(0, 30));
+                this.getView().updateView("billno");
+            }
+        }
     }
     @Override
     public void propertyChanged(PropertyChangedArgs e){
