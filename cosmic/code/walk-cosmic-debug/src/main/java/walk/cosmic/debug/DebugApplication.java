@@ -16,8 +16,6 @@ public class DebugApplication {
 
     public static void main(String[] args) {
     	
-//    	Thread.currentThread().setContextClassLoader(new KDSecurityClassLoader(Thread.currentThread().getContextClassLoader()));
-    	
         // 使用远程环境配置，避免本地默认地址覆盖 MC 中的服务配置。
         CosmicLauncher cosmic = new CosmicLauncher(true);
 
