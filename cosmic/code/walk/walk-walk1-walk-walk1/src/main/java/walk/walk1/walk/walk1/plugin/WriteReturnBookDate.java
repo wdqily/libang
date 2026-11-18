@@ -27,7 +27,7 @@ public class WriteReturnBookDate extends AbstractBillPlugIn implements Plugin {
         if (this.getModel().getDataEntityType().getProperties().containsKey("billno")) {
             Object billNo = this.getModel().getValue("billno");
             if (billNo == null || billNo.toString().trim().isEmpty()) {
-                // 单据编号字段的最大长度为 30。
+                //去掉-，截取30位
                 this.getModel().setValue("billno",
                         UUID.randomUUID().toString().replace("-", "").substring(0, 30));
                 this.getView().updateView("billno");
